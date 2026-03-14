@@ -230,8 +230,12 @@ int inst_to_binary(
          * Lab2-1 assignment
          * tip: you may need the function `lower5bit`
          */
-        warn("Lab2-1 assignment: SRAI instruction\n");
-        exit(EXIT_FAILURE);
+        binary = (0x10 << 26) + (0x05 << 12) + (0x04 << 2) + 0x03; // imm + funct3 + opcode
+		binary += (reg_to_num(arg1, line_no) << 7); // destination reg
+		binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+		binary += (lower5bit(arg3, line_no) << 20);
+        /* warn("Lab2-1 assignment: SRAI instruction\n");
+        exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == ORI) {
         /* Lab2-1 assignment */
         warn("Lab2-1 assignment: ORI instruction\n");
