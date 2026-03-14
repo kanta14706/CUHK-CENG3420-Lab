@@ -192,10 +192,11 @@ int inst_to_binary(
 
     // Integer Register-Immediate Instructions
     if (is_opcode(opcode) == ADDI) {
-        binary = (0x04 << 2) + 0x03;
-        binary += (reg_to_num(arg1, line_no) << 7);
-        binary += (reg_to_num(arg2, line_no) << 15);
-        binary += (MASK11_0(validate_imm(arg3, 12, line_no)) << 20);
+        // already given example
+        binary = (0x04 << 2) + 0x03; // opcode (no funct3 since = 0 for ADDI)
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // src reg (rs1)
+        binary += (MASK11_0(validate_imm(arg3, 12, line_no)) << 20); // imm value (rs2)
     } else if (is_opcode(opcode) == SLLI) {
         /* Lab2-1 assignment */
         warn("Lab2-1 assignment: SLLI instruction\n");
