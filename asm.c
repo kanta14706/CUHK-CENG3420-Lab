@@ -200,8 +200,8 @@ int inst_to_binary(
     } else if (is_opcode(opcode) == SLLI) {
         /* Lab2-1 assignment */
         binary = (0x01 << 12) + (0x04 << 2) + 0x03; //funct3 + opcode
-        binary += (reg_to_num(arg1, line_no) << 7) // destination reg (rd)
-        binary += (reg_to_num(arg2, line_no) << 15) // source reg (rs1)
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
         binary += (lower5bit(arg3, line_no) << 20);
         // & 0x1F(& 11111 to mask lower 5 bits)
         /* warn("Lab2-1 assignment: SLLI instruction\n");
@@ -209,8 +209,8 @@ int inst_to_binary(
     } else if (is_opcode(opcode) == XORI) {
         /* Lab2-1 assignment */
         binary = (0x04 << 12) + (0x04 << 2) + 0x03; //funct3 + opcode
-        binary += (reg_to_num(arg1, line_no) << 7) // destination reg (rd)
-        binary += (reg_to_num(arg2, line_no) << 15) // source reg (rs1)
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
         binary += (MASK11_0(validate_imm(arg3, 12, line_no)) << 20);
         /* warn("Lab2-1 assignment: XORI instruction\n");
         exit(EXIT_FAILURE);*/
@@ -246,7 +246,7 @@ int inst_to_binary(
         exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == ANDI) {
         /* Lab2-1 assignment */
-        binary = (0x07 << 12) + (0x04 << 2) + 0x03 // funct3 + opcode
+        binary = (0x07 << 12) + (0x04 << 2) + 0x03; // funct3 + opcode
         binary += (reg_to_num(arg1, line_no) << 7); // destination reg
         binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
         binary += (MASK11_0(validate_imm(arg3, 12, line_no)) << 20);
