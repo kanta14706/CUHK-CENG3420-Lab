@@ -288,25 +288,44 @@ int inst_to_binary(
         exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == XOR) {
         /* Lab2-1 assignment */
-        
+        binary = (0x04 << 12) + (0x0C << 2) + 0x03; // funct3 + opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+        binary += (reg_to_num(arg3, line_no) << 20); // source reg (rs2)
         /* warn("Lab2-1 assignment: XOR instruction\n");
         exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == SRL) {
         /* Lab2-1 assignment */
-        warn("Lab2-1 assignment: SRL instruction\n");
-        exit(EXIT_FAILURE);
+        binary = (0x05 << 12) + (0x0C << 2) + 0x03; // funct3 + opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+        binary += (reg_to_num(arg3, line_no) << 20); // source reg (rs2)
+        /* warn("Lab2-1 assignment: SRL instruction\n");
+        exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == SRA) {
         /* Lab2-1 assignment */
-        warn("Lab2-1 assignment: SRA instruction\n");
-        exit(EXIT_FAILURE);
+        binary = (0x20 << 25) + (0x05 << 12) + (0x0C << 2) + 0x03; // funct7 + funct3 + opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+        binary += (reg_to_num(arg3, line_no) << 20); // source reg (rs2)
+        /* warn("Lab2-1 assignment: SRA instruction\n");
+        exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == OR) {
         /* Lab2-1 assignment */
-        warn("Lab2-1 assignment: OR instruction\n");
-        exit(EXIT_FAILURE);
+        binary = (0x06 << 12) + (0x0C << 2) + 0x03; // funct3 + opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+        binary += (reg_to_num(arg3, line_no) << 20); // source reg (rs2)
+        /* warn("Lab2-1 assignment: OR instruction\n");
+        exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == AND) {
         /* Lab2-1 assignment */
-        warn("Lab2-1 assignment: AND instruction\n");
-        exit(EXIT_FAILURE);
+        binary = (0x07 << 12) + (0x0C << 2) + 0x03; // funct3 + opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(arg2, line_no) << 15); // source reg (rs1)
+        binary += (reg_to_num(arg3, line_no) << 20); // source reg (rs2)
+        /* warn("Lab2-1 assignment: AND instruction\n");
+        exit(EXIT_FAILURE); */
     }
 
 
@@ -317,16 +336,32 @@ int inst_to_binary(
          * tip: you may need the function `parse_regs_indirect_addr`
          * e.g., parse_regs_indirect_addr(arg2, line_no)
          */
-        warn("Lab2-1 assignment: JALR instruction\n");
-        exit(EXIT_FAILURE);
+        struct_regs_indirect_addr* ret = parse_regs_indirect_addr(arg2, line_no);
+        binary = (0x19 << 2) + 0x03; // opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += (reg_to_num(ret->reg, line_no) << 15); // source reg (rs1)
+        binary += (MASK11_0(ret->imm) << 20); // imm value (rs2)
+        free(ret);
+        /* warn("Lab2-1 assignment: JALR instruction\n");
+        exit(EXIT_FAILURE); */
     } else if (is_opcode(opcode) == JAL) {
         /*
          * Lab2-1 assignment
          * tip: you may need the function `handle_label_or_imm`
          * e.g., handle_label_or_imm(arg2, label_table, cmd_no, line_no)
          */
-        warn("Lab2-1 assignment: JAL instruction\n");
+        int target = handle_label_or_imm(line_no, arg2, label_table, number_of_labels);
+        int offset = target - addr;
+        
+        binary = (0x1B << 2) + 0x03; // opcode
+        binary += (reg_to_num(arg1, line_no) << 7); // destination reg (rd)
+        binary += ((offset >> 20) & 0x1) << 31; // imm[20]
+        binary += ((offset >> 1) & 0x3FF) << 21; // imm[10:1]
+        binary += ((offset >> 11) & 0x1) << 20; // imm[11]
+        binary += ((offset >> 12) & 0xFF) << 12; // imm[19:12]
+        /* warn("Lab2-1 assignment: JAL instruction\n");
         exit(EXIT_FAILURE);
+        */
     }
 
     // Conditional Branches
