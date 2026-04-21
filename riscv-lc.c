@@ -22,7 +22,7 @@ void cycle() {
     eval_micro_sequencer();   
     cycle_memory();
     eval_bus_drivers();
-    drive_bus();
+    drive_bus(); 
     latch_datapath_values();
 
     CURRENT_LATCHES = NEXT_LATCHES;
@@ -37,7 +37,7 @@ void eval_micro_sequencer() {
      * i.e., x0 always equal to zero
      */
     // error("Lab3-1 assignment: x0 is hard-wired to zero\n");
-    CURRENT_LATCHES.REGS[0] = 0;
+    NEXT_LATCHES.REGS[0] = CURRENT_LATCHES.REGS[0] = 0;
 
     int ird = get_IRD(CURRENT_LATCHES.MICROINSTRUCTION);
     int j = get_J(CURRENT_LATCHES.MICROINSTRUCTION);
