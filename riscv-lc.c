@@ -126,8 +126,7 @@ void latch_datapath_values() {
         /*
          *  Lab3-2 assignment
          */
-        if (mask_val(CURRENT_LATCHES.IR, 11, 7) != 0)
-            NEXT_LATCHES.REGS[mask_val(CURRENT_LATCHES.IR, 11, 7)] = BUS;
+        NEXT_LATCHES.REGS[mask_val(CURRENT_LATCHES.IR, 11, 7)] = BUS;
     }
     /* LD.MAR */
     if (get_LD_MAR(CURRENT_LATCHES.MICROINSTRUCTION)) {
