@@ -63,11 +63,11 @@ void cycle_memory() {
                     MEMORY[CURRENT_LATCHES.MAR+1] = MASK15_8(CURRENT_LATCHES.MDR);
                     break;
                 default: // word
-                    // your 4-byte write code
                     MEMORY[CURRENT_LATCHES.MAR] = MASK7_0(CURRENT_LATCHES.MDR);
                     MEMORY[CURRENT_LATCHES.MAR + 1] = MASK15_8(CURRENT_LATCHES.MDR);
                     MEMORY[CURRENT_LATCHES.MAR + 2] = MASK23_16(CURRENT_LATCHES.MDR);
                     MEMORY[CURRENT_LATCHES.MAR + 3] = MASK31_24(CURRENT_LATCHES.MDR);
+                    break;
             }
         } else {
             /* read */
@@ -81,14 +81,14 @@ void cycle_memory() {
                     MEM_VAL = sext_unit(MEMORY[CURRENT_LATCHES.MAR], 8);
                     break;
                 case 1: // halfword
-                    MEM_VAL = sext_unit(MEMORY[CURRENT_LATCHES.MAR] + 
-                                    (MEMORY[CURRENT_LATCHES.MAR+1] << 8), 16);
+                    MEM_VAL = sext_unit((MEMORY[CURRENT_LATCHES.MAR] | 
+                                        (MEMORY[CURRENT_LATCHES.MAR+1] << 8)), 16);
                     break;
                 default: // word
-                    MEM_VAL = MEMORY[CURRENT_LATCHES.MAR] |
-                             (MEMORY[CURRENT_LATCHES.MAR+1] << 8) |
-                             (MEMORY[CURRENT_LATCHES.MAR+2] << 16) |
-                             (MEMORY[CURRENT_LATCHES.MAR+3] << 24);
+                    MEM_VAL = (unsigned int)(MEMORY[CURRENT_LATCHES.MAR]) |
+                            ((unsigned int)(MEMORY[CURRENT_LATCHES.MAR+1]) << 8) |
+                            ((unsigned int)(MEMORY[CURRENT_LATCHES.MAR+2]) << 16) |
+                            ((unsigned int)(MEMORY[CURRENT_LATCHES.MAR+3]) << 24);
             }
         }
         mem_cycle_cnt++;
@@ -126,7 +126,8 @@ void latch_datapath_values() {
         /*
          *  Lab3-2 assignment
          */
-        NEXT_LATCHES.REGS[mask_val(CURRENT_LATCHES.IR, 11, 7)] = BUS;
+        if (mask_val(CURRENT_LATCHES.IR, 11, 7) != 0)
+            NEXT_LATCHES.REGS[mask_val(CURRENT_LATCHES.IR, 11, 7)] = BUS;
     }
     /* LD.MAR */
     if (get_LD_MAR(CURRENT_LATCHES.MICROINSTRUCTION)) {
